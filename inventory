@@ -1,8 +1,11 @@
 [web_servers]
-192.168.14.14  ansible_user=root ansible_become=no
-[workstations] 
-172.20.0.4 ansible_user=root ansible_become=no
-[db_servers] 
-172.20.0.5 ansible_user=root ansible_become=no
-[file_servers] 
-172.20.0.3 ansible_user=root ansible_become=no 
+vm1 ansible_host=192.168.14.235 ansible_port=2221 ansible_user=root ansible_become=no
+
+[workstations]
+vm2 ansible_host=192.168.14.235 ansible_port=2222 ansible_user=root ansible_become=no
+
+[db_servers]
+vm3 ansible_host=192.168.14.235 ansible_port=2223 ansible_user=root ansible_become=no
+
+[file_servers]
+vm4 ansible_host=192.168.14.235 ansible_port=2224 ansible_user=root ansible_become=no

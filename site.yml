@@ -4,44 +4,28 @@
    become: true
    pre_tasks:
  
-   - name: install up dnf
+   - name: update repository index (CentOS)
      tags: always
      dnf:
-       update_only: yes
        update_cache: yes
+     changed_when: false
      when: ansible_distribution == "CentOS"
  
-   - name: install updates (Ubuntu)
+   - name: update repository index (Ubuntu)
      tags: always
      apt:
-       upgrade: dist
        update_cache: yes
+     changed_when: false
      when: ansible_distribution == "Ubuntu"
  
  - hosts: all
    become: true
    tasks:
  
-   - name: create simone user
-     user:
-       name: simone
-       groups: root
-     
    - name: add ssh key for simone
-     tags: always
      authorized_key:
        user: simone
-       key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC3H2Ltn+a2aFoxloWRW9u0RkSuC68I79BcVxR6bRdwdIj7SyD4ziji0rUNY4MWMeWuIOnqd6hPNmV2idj6EDxLeLicF552kdU1drpYJjsPu8k0nMTonmV3LNwIo0yBtA4KLH7fvAiiOOaW6ee3Ee8a7MpapLTlXl8AW343V8K/FKwOktz98P5SKwBo0avCicgYvgYs0pJso+0C5ugm10+gHEmFNSOOjjjujk37zuKIqSXTVhnu6axa4/avbXt1xNPOaHg/y/R/22gWuQZiA4+kuSqcVIw3CdvQIXpp1eH5KnM/gMipwbpraJXsgAx2U6sP+jsNmP3/1mOn9wcCIs/6ly6NXe3ENC6/98Ae0TjVtgp94+KYouSTUWJ8k549EwWa+WNXbpE+UGlCLCxD7a+n14PW+PSIGZuVCRlPVpyosgzKMsMGOpY972g/2KFP3zKuCCJcUCH52qXeTRa8SSVXfuRmnfHO5qpu//W4EPzkSAfNkZZ9mAGTKwNFdTw+wACbZ9LbcdkxXyeelnOUsNwYMzEeo05pMkLxUiU2bvELXP+I+SMnxG2VJA8CsMm/OkINzOszQtFxgjpxwiY9UCoQQurWkZ9kvxW52D8Qc5mvnKDn/CgV4i8X3PvPGfhF0nt69cqTIdbuZuVx+wb5BfD477gy9rOArhauf8E8UVppHQ== root@workstation
-"
-         
-   - name: add sudoers file for simone
-     tags: always
-     copy:
-       src: sudoer_simone
-       dest: /etc/sudoers.d/simone
-       owner: root
-       group: root
-       mode: 0440
+       key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC3H2Ltn+a2aFoxloWRW9u0RkSuC68I79BcVxR6bRdwdIj7SyD4ziji0rUNY4MWMeWuIOnqd6hPNmV2idj6EDxLeLicF552kdU1drpYJjsPu8k0nMTonmV3LNwIo0yBtA4KLH7fvAiiOOaW6ee3Ee8a7MpapLTlXl8AW343V8K/FKwOktz98P5SKwBo0avCicgYvgYs0pJso+0C5ugm10+gHEmFNSOOjjjujk37zuKIqSXTVhnu6axa4/avbXt1xNPOaHg/y/R/22gWuQZiA4+kuSqcVIw3CdvQIXpp1eH5KnM/gMipwbpraJXsgAx2U6sP+jsNmP3/1mOn9wcCIs/6ly6NXe3ENC6/98Ae0TjVtgp94+KYouSTUWJ8k549EwWa+WNXbpE+UGlCLCxD7a+n14PW+PSIGZuVCRlPVpyosgzKMsMGOpY972g/2KFP3zKuCCJcUCH52qXeTRa8SSVXfuRmnfHO5qpu//W4EPzkSAfNkZZ9mAGTKwNFdTw+wACbZ9LbcdkxXyeelnOUsNwYMzEeo05pMkLxUiU2bvELXP+I+SMnxG2VJA8CsMm/OkINzOszQtFxgjpxwiY9UCoQQurWkZ9kvxW52D8Qc5mvnKDn/CgV4i8X3PvPGfhF0nt69cqTIdbuZuVx+wb5BfD477gy9rOArhauf8E8UVppHQ== root@workstation"
  
  - hosts: workstations
    become: true
@@ -72,7 +56,7 @@
          - php
        state: latest
      when: ansible_distribution == "CentOS"
-   
+ 
    - name: start and enable httpd (CentOS)
      tags: apache,centos,httpd
      service:
@@ -98,7 +82,7 @@
        line: ServerAdmin somebody@somewhere.net
      when: ansible_distribution == "CentOS"
      register: httpd
-  
+ 
    - name: restart httpd (CentOS)
      tags: apache,centos,httpd
      service:
